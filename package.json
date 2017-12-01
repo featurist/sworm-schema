@@ -19,8 +19,8 @@
   "author": "Derek Ekins <derek@featurist.co.uk>",
   "license": "MIT",
   "dependencies": {
-    "fs-promise": "^2.0.3",
     "lowscore": "^1.17.0",
+    "mz": "^2.7.0",
     "sworm": "^3.7.1"
   },
   "devDependencies": {
