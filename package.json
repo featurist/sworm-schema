@@ -27,5 +27,13 @@
   "devDependencies": {
     "mocha": "^4.0.1",
     "sqlite3": "^3.1.13"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/featurist/sworm-schema.git"
+  },
+  "bugs": {
+    "url": "https://github.com/featurist/sworm-schema/issues"
+  },
+  "homepage": "https://github.com/featurist/sworm-schema#readme"
 }
