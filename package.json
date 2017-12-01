@@ -1,0 +1,30 @@
+{
+  "name": "sworm-schema",
+  "version": "0.1.0",
+  "description": "Schema Utitlies for testing databases",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test"
+  },
+  "keywords": [
+    "sworm",
+    "sql",
+    "test",
+    "schema"
+  ],
+  "author": "Derek Ekins <derek@featurist.co.uk>",
+  "license": "MIT",
+  "dependencies": {
+    "fs-promise": "^2.0.3",
+    "lowscore": "^1.17.0",
+    "sworm": "^3.7.1"
+  },
+  "devDependencies": {
+    "mocha": "^4.0.1",
+    "sqlite3": "^3.1.13"
+  }
+}
