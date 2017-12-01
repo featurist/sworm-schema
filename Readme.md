@@ -58,6 +58,39 @@ await place({id: 2, name: 'auckland'}).save()
 await db.query(`select id, name from people`)
 ```
 
+Say you need to use a new query in your tests. You might want to see if the test schema supports it:
+```js
+await swormSchema.validateQuery(`
+  select p.name, o.name as orgName
+  from people p inner join
+    organisations o on p.org_id = o.id
+`)
+```
+
+which will output:
+
+```json
+{
+  "message": "Incompatible",
+  "missing": {
+    "people": {
+      "org_id": {
+        "type": "unknown"
+      }
+    },
+    "organisations": {
+      "name": {
+        "type": "unknown"
+      },
+      "id": {
+        "type": "unknown"
+      }
+    }
+  }
+}
+```
+
+
 You might want to clean up the data afterwards:
 
 ```js

@@ -20,6 +20,7 @@ describe('create schema', () => {
 
     const db = swormSchema.connect()
 
+
     const tables = (await db.query(`
       SELECT name FROM sqlite_master
       WHERE type='table'

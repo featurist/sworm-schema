@@ -47,7 +47,7 @@ describe('validate query', () => {
     `)
 
     assert.deepEqual(missingSchema, {
-      message: 'OK',
+      message: 'Incompatible',
       missing: {
         places: {
           id: { type: 'unknown' },
