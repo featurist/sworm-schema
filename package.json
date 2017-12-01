@@ -21,6 +21,7 @@
   "dependencies": {
     "lowscore": "^1.17.0",
     "mz": "^2.7.0",
+    "sqlite-parser": "^1.0.1",
     "sworm": "^3.7.1"
   },
   "devDependencies": {
