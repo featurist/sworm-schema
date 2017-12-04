@@ -35,4 +35,13 @@ describe('drop schema', () => {
     const dbExists = await fs.exists(swormSchema.config.config.filename)
     assert.equal(dbExists, false)
   })
+
+  it('dropping a database that does not exist does not result in an error', async () => {
+    const swormSchema = new SwormSchema({
+      url: 'sqlite:test/db/test.db',
+      schema: {
+      }
+    })
+    await swormSchema.drop()
+  })
 })
