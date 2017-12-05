@@ -56,4 +56,35 @@ describe('validate query', () => {
       }
     })
   })
+
+  it('correctly identifies columns when query with aliased tables of the same name are in a union', async () => {
+    const swormSchema = new SwormSchema({
+      url: 'sqlite:test/db/test.db',
+      schema: {}
+    })
+
+    const missingSchema = swormSchema.validateQuery(`
+      select p.id, p.name
+      from people p
+
+      union
+
+      select p.id, p.name
+      from places p
+    `)
+
+    assert.deepEqual(missingSchema, {
+      message: 'Incompatible',
+      missing: {
+        people: {
+          id: { type: 'unknown' },
+          name: { type: 'unknown' },
+        },
+        places: {
+          id: { type: 'unknown' },
+          name: { type: 'unknown' },
+        }
+      }
+    })
+  })
 })
