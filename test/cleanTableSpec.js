@@ -1,9 +1,9 @@
 const assert = require('assert')
-const SwormSchema = require('..')
+const {Schema} = require('..')
 
 describe('clean tables', () => {
   it('removes all data from the tables', async () => {
-    const swormSchema = new SwormSchema({
+    const swormSchema = new Schema({
       url: 'sqlite:test/db/test.db',
       schema: {
         people: {

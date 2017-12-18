@@ -1,10 +1,10 @@
 const assert = require('assert')
 const fs = require('mz/fs')
-const SwormSchema = require('..')
+const {Schema} = require('..')
 
 describe('drop schema', () => {
   it('drops tables defined in the schema', async () => {
-    const swormSchema = new SwormSchema({
+    const swormSchema = new Schema({
       url: 'sqlite:test/db/test.db',
       schema: {
         people: {
@@ -37,7 +37,7 @@ describe('drop schema', () => {
   })
 
   it('dropping a database that does not exist does not result in an error', async () => {
-    const swormSchema = new SwormSchema({
+    const swormSchema = new Schema({
       url: 'sqlite:test/db/test.db',
       schema: {
       }

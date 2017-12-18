@@ -1,1 +1,2 @@
-module.exports = require('./lib/SwormSchema')
+module.exports.Schema = require('./lib/SwormSchema')
+module.exports.Query = require('./lib/SwormQuery')

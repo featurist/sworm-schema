@@ -18,9 +18,9 @@ Firstly lets define our schema and suply a url connection string the datbase.
 The most common way of using this is with sqlite:
 
 ```js
-const SwormSchema = require('sworm-schema')
+const {Schema} = require('sworm-schema')
 
-const swormSchema = new SwormSchema({
+const swormSchema = new Schema({
   url: 'sqlite:test/db/test.db',
   schema: {
     people: {
@@ -101,4 +101,59 @@ Or if you just want to get rid of the whole database:
 
 ```js
 await swormSchema.drop()
+```
+
+## Sworm Query
+
+You can use Sworm Query to fetch all the data that is required to execute a particular query.
+
+This is useful if you wish to test queries based on existing data.
+
+```js
+const {Schema, Query} = require('sworm-schema')
+
+const swormSchema = new Schema({
+  url: 'sqlite:test/db/test.db',
+  schema: {
+    people: {
+      id: {type: 'integer', primaryKey: true},
+      orgId: {type: 'integer'},
+      parentId: {type: 'integer', null: true},
+      name: {type: 'text'},
+    },
+    orgs: {
+      id: {type: 'integer', primaryKey: true},
+      name: {type: 'text'},
+    }
+  }
+})
+
+await swormSchema.create()
+const db = swormSchema.connect()
+const person = db.model({table: 'people'})
+const org = db.model({table: 'orgs'})
+
+// setup some data
+await person({id: 1, orgId: 1, name: 'jill'}).save()
+await person({id: 2, orgId: 1, parentId: 1, name: 'julie'}).save()
+await org({id: 1, name: 'featurist'}).save()
+
+const query = new Query({
+  schema: swormSchema.schema,
+  query: `
+  select p.name, o.name as orgName
+  from people p inner join
+    organisations o on p.org_id = o.id
+  `
+})
+
+const model = await query.fetchData(db)
+
+/*
+model == [
+    {table: 'orgs', columns: {id: 1, name: 'featurist'}},
+    {table: 'people', columns: {id: 1, orgid: 1, parentid: null, name: 'jill'}},
+    {table: 'people', columns: {id: 2, orgid: 1, parentid: 1, name: 'julie'}},
+  ]
+*/
 ```
