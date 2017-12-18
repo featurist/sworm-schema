@@ -1,10 +1,10 @@
 const assert = require('assert')
 const fs = require('mz/fs')
-const SwormSchema = require('..')
+const {Schema} = require('..')
 
 describe('validate query', () => {
   it('returns no changes when the schema matches the query', async () => {
-    const swormSchema = new SwormSchema({
+    const swormSchema = new Schema({
       url: 'sqlite:test/db/test.db',
       schema: {
         people: {
@@ -27,7 +27,7 @@ describe('validate query', () => {
   })
 
   it('returns the missing tables/columns when the schema does not match', async () => {
-    const swormSchema = new SwormSchema({
+    const swormSchema = new Schema({
       url: 'sqlite:test/db/test.db',
       schema: {
         people: {
@@ -60,7 +60,7 @@ describe('validate query', () => {
   })
 
   it('correctly identifies columns when query with aliased tables of the same name are in a union', async () => {
-    const swormSchema = new SwormSchema({
+    const swormSchema = new Schema({
       url: 'sqlite:test/db/test.db',
       schema: {}
     })
@@ -92,7 +92,7 @@ describe('validate query', () => {
   })
 
   it('identitfies columns that are not associated with a table', async () => {
-    const swormSchema = new SwormSchema({
+    const swormSchema = new Schema({
       url: 'sqlite:test/db/test.db',
       schema: {
         people: {

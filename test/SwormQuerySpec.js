@@ -1,11 +1,22 @@
 require('./cleanup')
-const SwormSchema = require('../')
-const SwormQuery = require('../lib/SwormQuery')
+const {Schema, Query} = require('../')
 const assert = require('assert')
 
 describe('SwormQuery', () => {
   it('lists all the columns that are used in the query including original aliases', () => {
-    const query = new SwormQuery({query: `
+    const schema = {
+      people: {
+        id: {type: 'integer', primaryKey: true},
+        name: {type: 'text'},
+      },
+      orgs: {
+        id: {type: 'integer', primaryKey: true},
+        name: {type: 'text'},
+      }
+    }
+    const query = new Query({
+      schema,
+      query: `
       select p.name, o.name
       from people p inner join
       orgs o on p.id = o.id
@@ -58,7 +69,19 @@ describe('SwormQuery', () => {
   })
 
   it('creates a query with all of the join data in the select statement', () => {
-    const query = new SwormQuery({query: `
+    const schema = {
+      people: {
+        id: {type: 'integer', primaryKey: true},
+        name: {type: 'text'},
+      },
+      orgs: {
+        id: {type: 'integer', primaryKey: true},
+        name: {type: 'text'},
+      }
+    }
+    const query = new Query({
+      schema,
+      query: `
       select p.name, o.name
       from people p inner join
       orgs o on p.id = o.id
@@ -73,8 +96,32 @@ orgs o on p.id = o.id
 `)
   })
 
+  it('adds columns with not null constraints', () => {
+    const schema = {
+      people: {
+        id: {type: 'integer', primaryKey: true},
+        orgId: {type: 'integer', null: false},
+        parentId: {type: 'integer', null: true},
+        name: {type: 'text'},
+      }
+    }
+    const query = new Query({
+      schema,
+      query: `
+      select p.name from people p
+    `})
+
+
+    query.analyse()
+
+    assert.equal(query.asFetchAll(), `
+select p.name as "column0", p.id as "column2", p.orgId as "column3"
+from people p
+`)
+  })
+
   it('converts data from result set to writeable model', async () => {
-    const swormSchema = new SwormSchema({
+    const swormSchema = new Schema({
       url: 'sqlite:test/db/test.db',
       schema: {
         people: {
@@ -98,14 +145,13 @@ orgs o on p.id = o.id
     await person({id: 2, orgId: 1, parentId: 1, name: 'julie'}).save()
     await org({id: 1, name: 'featurist'}).save()
 
-    const query = new SwormQuery({schema: swormSchema.schema, query: `
+    const query = new Query({schema: swormSchema.schema, query: `
       select p.name, parent.name as parent, o.name orgName
       from people p inner join
         orgs o on p.orgId = o.id left join
         people parent on p.parentId = p.id
     `})
 
-    // we'd really call this against a production db
     const model = await query.fetchData(db)
 
     assert.deepEqual(model, [

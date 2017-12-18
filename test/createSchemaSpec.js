@@ -1,9 +1,9 @@
 const assert = require('assert')
-const SwormSchema = require('..')
+const {Schema} = require('..')
 
 describe('create schema', () => {
   it('creates tables defined in the schema', async () => {
-    const swormSchema = new SwormSchema({
+    const swormSchema = new Schema({
       url: 'sqlite:test/db/test.db',
       schema: {
         people: {
