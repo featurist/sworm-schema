@@ -1,6 +1,6 @@
 {
   "name": "sworm-schema",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Schema Utilities for testing databases",
   "main": "index.js",
   "directories": {
@@ -21,12 +21,15 @@
   "dependencies": {
     "lowscore": "^1.17.0",
     "mz": "^2.7.0",
-    "sqlite-parser": "^1.0.1",
-    "sworm": "^3.7.1"
+    "sqlite-parser": "^1.0.1"
+  },
+  "peerDependencies": {
+    "sworm": "^3.7"
   },
   "devDependencies": {
     "mocha": "^4.0.1",
-    "sqlite3": "^3.1.13"
+    "sqlite3": "^3.1.13",
+    "sworm": "^3.7.1"
   },
   "repository": {
     "type": "git",
