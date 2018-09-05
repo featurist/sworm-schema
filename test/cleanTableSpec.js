@@ -17,8 +17,9 @@ describe('clean tables', () => {
       }
     })
     await swormSchema.create()
+    await swormSchema.connect()
 
-    const db = swormSchema.connect()
+    const db = swormSchema.db
 
     const person = db.model({table: 'people'})
     const place = db.model({table: 'places'})

@@ -18,8 +18,9 @@ describe('drop schema', () => {
       }
     })
     await swormSchema.create()
+    await swormSchema.connect()
 
-    const db = swormSchema.connect()
+    const db = swormSchema.db
 
     const tables = (await db.query(`
       SELECT name FROM sqlite_master
