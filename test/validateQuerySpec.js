@@ -22,7 +22,7 @@ describe('validate query', () => {
     assert.deepEqual(missingSchema, {
       message: 'OK',
       missing: {},
-      unknownColumns: []
+      unknownTables: []
     })
   })
 
@@ -55,7 +55,7 @@ describe('validate query', () => {
           name: { type: 'unknown' },
         }
       },
-      unknownColumns: []
+      unknownTables: []
     })
   })
 
@@ -87,11 +87,11 @@ describe('validate query', () => {
           name: { type: 'unknown' },
         }
       },
-      unknownColumns: []
+      unknownTables: []
     })
   })
 
-  it('identitfies columns that are not associated with a table', async () => {
+  it('identifies columns that are not associated with a table', async () => {
     const swormSchema = new SwormSchema({
       url: 'sqlite:test/db/test.db',
       schema: {
@@ -103,16 +103,41 @@ describe('validate query', () => {
     })
 
     const missingSchema = swormSchema.validateQuery(`
-      select id, p.name
+      select p.bananas, p.name
+      from people p
+    `)
+
+    assert.deepEqual(missingSchema, {
+      message: 'Incompatible',
+      missing: {
+        people: {
+          bananas: { type: 'unknown' }
+        }
+      },
+      unknownTables: []
+    })
+  })
+
+  it('identifies unknown tables', async () => {
+    const swormSchema = new SwormSchema({
+      url: 'sqlite:test/db/test.db',
+      schema: {
+        people: {
+          id: {type: 'integer'},
+          name: {type: 'text'},
+        },
+    }
+    })
+
+    const missingSchema = swormSchema.validateQuery(`
+      select p.id, foo.bar
       from people p
     `)
 
     assert.deepEqual(missingSchema, {
       message: 'Incompatible',
       missing: {},
-      unknownColumns: [
-        'id'
-      ]
+      unknownTables: ['foo']
     })
   })
 })
